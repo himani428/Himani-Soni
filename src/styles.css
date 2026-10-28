@@ -100,3 +100,10 @@ h2.hand{font-size:clamp(2rem,5.4vh,3.4rem);line-height:1.1}h3.hand{font-size:cla
 .cover .pol{width:clamp(100px,17vh,150px)}
 .cover .sub{font-size:calc(var(--lh)*.62);line-height:calc(var(--lh)*.85)}
 .how{padding:1vh 20px}
+/* v6: tighter gap under the navbar, cleaner cover */
+.desk{align-content:start;padding-top:82px}
+.book,.leaf{height:calc(100svh - 92px)}
+.cover{align-content:center;gap:3vh;padding-top:0}
+.cover .pol{width:clamp(140px,27vh,240px)}
+.cover .sub{font-size:calc(var(--lh)*.8)}
+.top{justify-content:space-between}
