@@ -90,21 +90,12 @@ const pages = (go) => [
       </div>
       <p className="sub pop" style={{ "--d": 1 }}>Engineer by day. Novelist and songwriter by night.</p>
       <Pol src="/me.jpg" cap="that is me" tilt={4} fallback={<em>HS</em>} />
-      <div className="how pop" style={{ "--d": 3 }}>
-        <b className="hand">How to read this notebook</b>
-        <ul>
-          <li>Click any page to turn it. Right pages go forward, left pages go back.</li>
-          <li>Or use the arrow keys, the buttons below, or swipe on a phone.</li>
-          <li>The Contents button jumps straight to any chapter.</li>
-          <li>Links and buttons inside pages work as usual.</li>
-        </ul>
-      </div>
     </div>
   ),
   () => (
     <>
       <Head ch="Table of contents" t="What is inside" />
-      <ol className="toc">{TOC.map(([t, p], i) => <li key={t} className="pop" style={{ "--d": i + 1 }}><button onClick={() => go(p)}>{t}<i /><span>{p}</span></button></li>)}</ol>
+      <ol className="toc">{TOC.map(([t, p], i) => <li key={t} className="pop" style={{ "--d": i + 1 }}><button onClick={() => go(p)}>{t}</button></li>)}</ol>
     </>
   ),
   () => (
@@ -195,14 +186,13 @@ export default function App() {
     const k = (e) => e.key === "ArrowRight" ? step(1) : e.key === "ArrowLeft" ? step(-1) : 0;
     addEventListener("keydown", k); return () => removeEventListener("keydown", k);
   });
-  const face = (p, side) => <div className={`face ${side} ${p === 0 || p === 15 ? "leather" : "paper"} ${vis(p) ? "vis" : ""}`} aria-hidden={!vis(p)}><div className="in">{list[p](vis(p))}</div>{p > 0 && p < 15 && <span className="pn mono">{p}</span>}</div>;
+  const face = (p, side) => <div className={`face ${side} ${p === 0 || p === 15 ? "leather" : "paper"} ${vis(p) ? "vis" : ""}`} aria-hidden={!vis(p)}><div className="in">{list[p](vis(p))}</div></div>;
   const shift = mobile ? 0 : s === 0 ? -25 : s === N ? 25 : 0;
   return (
     <main className="desk">
       <div className="decor" aria-hidden="true"><i /><i /><i /><i /></div>
       <header className="top">
         <button className="brand hand" onClick={() => go(0)}>Himani Soni</button>
-        <span className="mono hint-top">Click a page or use the arrow keys to turn it</span>
         <div className="links">
           <button onClick={() => go(1)}>Contents</button>
           <a className="dl" href="/Himani_Soni_Resume.pdf" download>Download resume</a>
@@ -211,7 +201,7 @@ export default function App() {
         </div>
       </header>
       {mobile ? (
-        <div className="leaf-wrap" onTouchStart={(e) => (tx.current = e.touches[0].clientX)} onTouchEnd={(e) => { const d = e.changedTouches[0].clientX - tx.current; if (Math.abs(d) > 50) step(d < 0 ? 1 : -1); }}><div className="leaf" key={cur}>{face(cur, "r")}</div></div>
+        <div className="leaf-wrap" onTouchStart={(e) => (tx.current = e.touches[0].clientX)} onClick={(e) => { if (e.target.closest("a,button,.flow li")) return; const r = e.currentTarget.getBoundingClientRect(); step(e.clientX - r.left < r.width * 0.3 ? -1 : 1); }} onTouchEnd={(e) => { const d = e.changedTouches[0].clientX - tx.current; if (Math.abs(d) > 50) step(d < 0 ? 1 : -1); }}><div className="leaf" key={cur}>{face(cur, "r")}</div></div>
       ) : (
         <div className="book" style={{ transform: `translateX(${shift}%)` }}>
           <div className="spine" aria-hidden="true" />
@@ -222,11 +212,6 @@ export default function App() {
           ))}
         </div>
       )}
-      <nav className="ctl">
-        <button onClick={() => step(-1)} aria-label="Previous page">Back</button>
-        <span className="mono">{mobile ? cur : s * 2 - 1 < 1 ? "cover" : `${s * 2 - 1} / ${s * 2}`}</span>
-        <button onClick={() => step(1)} aria-label="Next page">Turn page</button>
-      </nav>
     </main>
   );
 }
